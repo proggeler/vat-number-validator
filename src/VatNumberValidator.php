@@ -91,7 +91,7 @@ class VatNumberValidator extends ConstraintValidator
         }
 
         // Use only the expressions for the given country code
-        $schemes = preg_grep($data = '/^\/\^\(' . preg_quote(substr($value, 0, 2), '/') . '/', $this->schemes);
+        $schemes = preg_grep('/^\/\^\(' . preg_quote(substr($value, 0, 2), '/') . '/', $this->schemes);
 
         // Check the string against the regular expressions for all types of
         // VAT numbers
