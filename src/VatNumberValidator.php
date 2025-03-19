@@ -430,11 +430,11 @@ class VatNumberValidator extends ConstraintValidator
                 (int) substr($number, 5, 2) +
                 (int) substr($number, 6);
 
-			$isValid = (0 === $temp % 11) && (0 === (int) $number % 11);
-			if ($isValid === true) {
-				return true;
-			}
-			return $this->CZverifyRC($number);
+            $isValid = (0 === $temp % 11) && (0 === (int) $number % 11);
+            if ($isValid === true) {
+                return true;
+            }
+            return $this->CZverifyRC($number);
         }
 
         // else error
@@ -1425,43 +1425,43 @@ class VatNumberValidator extends ConstraintValidator
         return 0 === (int) $number % 11;
     }
 
-	private function CZverifyRC(string $rc): bool
-	{
-		// be liberal in what you receive
-		if (!preg_match('#^\s*(\d\d)(\d\d)(\d\d)[ /]*(\d\d\d)(\d?)\s*$#', $rc, $matches)) {
-			return false;
-		}
+    private function CZverifyRC(string $rc): bool
+    {
+        // be liberal in what you receive
+        if (!preg_match('#^\s*(\d\d)(\d\d)(\d\d)[ /]*(\d\d\d)(\d?)\s*$#', $rc, $matches)) {
+            return false;
+        }
 
-		list(, $year, $month, $day, $ext, $c) = $matches;
+        list(, $year, $month, $day, $ext, $c) = $matches;
 
-		if ($c === '') {
-			$year += $year < 54 ? 1900 : 1800;
-		} else {
-			// kontrolní číslice
-			$mod = ($year . $month . $day . $ext) % 11;
-			if ($mod === 10) $mod = 0;
-			if ($mod !== (int) $c) {
-				return false;
-			}
+        if ($c === '') {
+            $year += $year < 54 ? 1900 : 1800;
+        } else {
+            // kontrolní číslice
+            $mod = ($year . $month . $day . $ext) % 11;
+            if ($mod === 10) $mod = 0;
+            if ($mod !== (int) $c) {
+                return false;
+            }
 
-			$year += $year < 54 ? 2000 : 1900;
-		}
+            $year += $year < 54 ? 2000 : 1900;
+        }
 
-		// k měsíci může být připočteno 20, 50 nebo 70
-		if ($month > 70 && $year > 2003) {
-			$month -= 70;
-		} elseif ($month > 50) {
-			$month -= 50;
-		} elseif ($month > 20 && $year > 2003) {
-			$month -= 20;
-		}
+        // k měsíci může být připočteno 20, 50 nebo 70
+        if ($month > 70 && $year > 2003) {
+            $month -= 70;
+        } elseif ($month > 50) {
+            $month -= 50;
+        } elseif ($month > 20 && $year > 2003) {
+            $month -= 20;
+        }
 
-		// kontrola data
-		if (!checkdate($month, $day, $year)) {
-			return false;
-		}
+        // kontrola data
+        if (!checkdate($month, $day, $year)) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
     
 }
